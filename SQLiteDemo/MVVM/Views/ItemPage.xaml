@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SQLiteDemo.MVVM.ViewModels"
+             x:Class="SQLiteDemo.MVVM.Views.ItemPage"
+             x:Name="ItemsPage"
+             Title="Items">
+
+    <ContentPage.BindingContext>
+        <vm:ItemViewModel />
+    </ContentPage.BindingContext>
+
+    <AbsoluteLayout BackgroundColor="#F8F8F8">
+
+        <!-- ✅ Scrollable Main Section -->
+        <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    AbsoluteLayout.LayoutFlags="All">
+
+            <VerticalStackLayout Padding="20"
+                                 Spacing="15"
+                                 HorizontalOptions="Center"
+                                 WidthRequest="400">
+
+                <!-- Add Item Section -->
+                <Frame Padding="15"
+                       CornerRadius="10"
+                       HasShadow="True"
+                       BackgroundColor="White">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Add New Item"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#4B0082"
+                               HorizontalOptions="Center" />
+
+                        <Entry Placeholder="Name"
+                               Text="{Binding NewItem.Name}" />
+
+                        <Entry Placeholder="Price"
+                               Keyboard="Numeric"
+                               Text="{Binding NewItem.ItemPrice}" />
+
+                        <Entry Placeholder="Description"
+                               Text="{Binding NewItem.Description}" />
+
+                        <Button Text="Add Item"
+                                Command="{Binding AddItemCommand}"
+                                BackgroundColor="#5D3FD3"
+                                TextColor="White"
+                                CornerRadius="8"
+                                FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Items List -->
+                <Label Text="Items List"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       Margin="0,10,0,0"
+                       TextColor="#333" />
+
+                <CollectionView ItemsSource="{Binding Items}"
+                                SelectionMode="None"
+                                VerticalOptions="FillAndExpand">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems Mode="Reveal">
+                                        <SwipeItem Text="Edit"
+                                                   BackgroundColor="#00BFFF"
+                                                   Command="{Binding BindingContext.OpenEditPopupCommand, Source={x:Reference ItemsPage}}"
+                                                   CommandParameter="{Binding .}" />
+                                        <SwipeItem Text="Delete"
+                                                   BackgroundColor="#FF6347"
+                                                   Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ItemsPage}}"
+                                                   CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+
+                                <Frame Padding="10"
+                                       Margin="5,5,5,0"
+                                       BackgroundColor="White"
+                                       BorderColor="#DDD"
+                                       CornerRadius="10"
+                                       HasShadow="True">
+                                    <VerticalStackLayout Spacing="3">
+                                        <Label Text="{Binding Name}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="#222" />
+
+                                        <Label Text="{Binding ItemPrice, StringFormat='Price: {0:C}'}"
+                                               FontSize="14"
+                                               TextColor="#555" />
+
+                                        <Label Text="{Binding Description}"
+                                               FontSize="13"
+                                               FontAttributes="Italic"
+                                               TextColor="#777" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- 🪟 Edit Popup -->
+        <Grid IsVisible="{Binding IsEditPopupVisible}"
+              BackgroundColor="#80000000"
+              AbsoluteLayout.LayoutBounds="0,0,1,1"
+              AbsoluteLayout.LayoutFlags="All">
+
+            <Frame BackgroundColor="White"
+                   Padding="20"
+                   CornerRadius="15"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   WidthRequest="300"
+                   HasShadow="True">
+                <VerticalStackLayout>
+                    <Label Text="Edit Item"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10" />
+
+                    <Entry Placeholder="Name" Text="{Binding EditableItem.Name}" />
+                    <Entry Placeholder="Price" Keyboard="Numeric" Text="{Binding EditableItem.ItemPrice}" />
+                    <Entry Placeholder="Description" Text="{Binding EditableItem.Description}" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="0,15,0,0">
+                        <Button Text="Save"
+                                Command="{Binding SaveEditedItemCommand}"
+                                WidthRequest="100"
+                                BackgroundColor="#5D3FD3"
+                                TextColor="White" />
+                        <Button Text="Cancel"
+                                Command="{Binding CloseEditPopupCommand}"
+                                WidthRequest="100"
+                                BackgroundColor="LightGray" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+
+    </AbsoluteLayout>
+</ContentPage>

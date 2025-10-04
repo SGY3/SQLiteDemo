@@ -1,4 +1,6 @@
-﻿namespace SQLiteDemo
+﻿using SQLiteDemo.MVVM.Views;
+
+namespace SQLiteDemo
 {
     public partial class App : Application
     {
@@ -6,7 +8,7 @@
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new ItemPage();
         }
     }
 }

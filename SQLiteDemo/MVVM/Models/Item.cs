@@ -13,7 +13,7 @@ namespace SQLiteDemo.MVVM.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        [Unique, NotNull, Indexed]
+        [Unique, NotNull]
         public string Name { get; set; }
         public decimal ItemPrice { get; set; }
         [MaxLength(100)]
